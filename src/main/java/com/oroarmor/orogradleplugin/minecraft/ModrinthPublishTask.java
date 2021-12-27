@@ -27,8 +27,10 @@ package com.oroarmor.orogradleplugin.minecraft;
 import com.modrinth.minotaur.TaskModrinthUpload;
 import com.oroarmor.orogradleplugin.publish.PublishProjectExtension;
 import com.oroarmor.orogradleplugin.publish.PublishProjectToLocationTask;
+import org.gradle.api.tasks.Internal;
 
 public class ModrinthPublishTask extends TaskModrinthUpload implements PublishProjectToLocationTask {
+    @Internal
     private String releaseURL;
 
     public ModrinthPublishTask() {

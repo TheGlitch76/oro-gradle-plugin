@@ -35,8 +35,10 @@ import com.oroarmor.orogradleplugin.publish.PublishProjectExtension;
 import com.oroarmor.orogradleplugin.publish.PublishProjectToLocationTask;
 import org.gradle.api.provider.Property;
 import org.gradle.api.tasks.Input;
+import org.gradle.api.tasks.Internal;
 
 public abstract class CurseforgePublishTask extends CurseUploadTask implements PublishProjectToLocationTask {
+    @Internal
     private String releaseURL;
 
     @Input

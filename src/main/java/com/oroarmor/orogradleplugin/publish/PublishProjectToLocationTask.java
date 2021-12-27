@@ -25,7 +25,9 @@
 package com.oroarmor.orogradleplugin.publish;
 
 import org.gradle.api.Task;
+import org.gradle.api.tasks.Internal;
 
 public interface PublishProjectToLocationTask extends Task {
+    @Internal
     String getReleaseURL();
 }

@@ -30,6 +30,7 @@ import com.oroarmor.orogradleplugin.GenericExtension;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.file.ConfigurableFileCollection;
 import org.gradle.api.tasks.InputFiles;
+import org.gradle.api.tasks.Internal;
 import org.gradle.api.tasks.TaskAction;
 import org.kohsuke.github.GHRelease;
 import org.kohsuke.github.GHReleaseBuilder;
@@ -38,6 +39,7 @@ import org.kohsuke.github.GitHub;
 
 public class PublishProjectToGithubTask extends DefaultTask implements PublishProjectToLocationTask {
     private final ConfigurableFileCollection assets;
+    @Internal
     protected String releaseURL = null;
 
     public PublishProjectToGithubTask() {
