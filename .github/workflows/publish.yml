@@ -1,4 +1,4 @@
-name: Publish Mod to external sites
+name: Publish Plugin to Maven
 
 on:
   workflow_dispatch:
@@ -17,8 +17,8 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: Deploy
-          run: ./gradlew build publish
-          env:
-            MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
-            MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}
-            MAVEN_URL: ${{ secrets.MAVEN_URL }}
+        run: ./gradlew build publish
+        env:
+          MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
+          MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}
+          MAVEN_URL: ${{ secrets.MAVEN_URL }}
