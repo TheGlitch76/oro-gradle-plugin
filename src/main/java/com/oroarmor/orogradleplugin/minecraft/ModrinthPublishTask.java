@@ -1,0 +1,65 @@
+/*
+ * MIT License
+ *
+ * Copyright (c) 2021 OroArmor (Eli Orona)
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+package com.oroarmor.orogradleplugin.minecraft;
+
+import com.modrinth.minotaur.TaskModrinthUpload;
+import com.oroarmor.orogradleplugin.publish.PublishProjectExtension;
+import com.oroarmor.orogradleplugin.publish.PublishProjectToLocationTask;
+
+public class ModrinthPublishTask extends TaskModrinthUpload implements PublishProjectToLocationTask {
+    private String releaseURL;
+
+    public ModrinthPublishTask() {
+        this.setGroup("publishProject");
+
+        this.onlyIf(_unused -> System.getenv("MODRINTH_TOKEN") != null);
+
+        MinecraftPublishingExtension extension = getProject().getExtensions().getByType(MinecraftPublishingExtension.class);
+
+        this.token = System.getenv("MODRINTH_TOKEN");
+        this.projectId = extension.getModrinthId().get();
+        this.versionNumber = getProject().getVersion().toString();
+        uploadFile = extension.getModTask();
+        this.dependsOn(extension.getModTask());
+
+        extension.getVersions().get().forEach(this::addGameVersion);
+        this.addLoader(extension.getLoader().get().toLowerCase());
+
+        this.changelog = getProject().getExtensions().getByType(PublishProjectExtension.class).getChangelog().get();
+
+        this.doLast(task -> {
+            ModrinthPublishTask publishTask = ((ModrinthPublishTask) task);
+
+            if (publishTask.wasUploadSuccessful()) {
+                publishTask.releaseURL ="https://modrinth.com/mod/netherite-plus-mod/version/" + publishTask.uploadInfo.getId();
+            }
+        });
+    }
+
+    @Override
+    public String getReleaseURL() {
+        return releaseURL;
+    }
+}
