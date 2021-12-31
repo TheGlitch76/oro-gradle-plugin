@@ -52,7 +52,7 @@ public class PublishProjectToGithubTask extends DefaultTask implements PublishPr
     @TaskAction
     public void publishToGithub() throws IOException {
         GitHub github = GitHub.connectUsingOAuth(System.getenv("GITHUB_TOKEN"));
-        GenericExtension extension = getExtensions().getByType(GenericExtension.class);
+        GenericExtension extension = getProject().getExtensions().getByType(GenericExtension.class);
         GHRepository repository = github.getRepository(extension.getGithubProjectName().get());
 
         GHReleaseBuilder releaseBuilder = new GHReleaseBuilder(repository, getProject().getVersion().toString());
