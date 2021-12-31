@@ -24,6 +24,7 @@
 
 package com.oroarmor.orogradleplugin.minecraft;
 
+import com.matthewprenger.cursegradle.CurseExtension;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 
@@ -31,5 +32,7 @@ public abstract class MinecraftPlugin implements Plugin<Project> {
     @Override
     public void apply(Project target) {
         target.getExtensions().create("minecraftPublishing", MinecraftPublishingExtension.class, target);
+
+        target.getExtensions().create("curseforge", CurseExtension.class);
     }
 }

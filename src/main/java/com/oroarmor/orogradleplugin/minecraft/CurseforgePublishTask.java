@@ -26,6 +26,7 @@ package com.oroarmor.orogradleplugin.minecraft;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Locale;
 
 import com.matthewprenger.cursegradle.CurseArtifact;
 import com.matthewprenger.cursegradle.CurseRelation;
@@ -48,7 +49,7 @@ public abstract class CurseforgePublishTask extends CurseUploadTask implements P
         this.setGroup("publishProject");
 
         artifactName = getProject().getObjects().property(String.class);
-        artifactName.convention(getProject().getExtensions().getByType(GenericExtension.class).getName() + " - " + getProject().getVersion());
+        artifactName.convention(getProject().getExtensions().getByType(GenericExtension.class).getName().get() + " - " + getProject().getVersion());
 
         this.onlyIf(_unused -> System.getenv("CURSE_API_KEY") != null);
 
@@ -62,20 +63,24 @@ public abstract class CurseforgePublishTask extends CurseUploadTask implements P
         artifact.setChangelogType("text");
         artifact.setReleaseType("release");
         artifact.setGameVersionStrings(new ArrayList<>());
-        extension.getDependencies().get().forEach(artifact.getGameVersionStrings()::add);
-        artifact.getGameVersionStrings().add(extension.getLoader());
+        extension.getVersions().get().forEach(artifact.getGameVersionStrings()::add);
+        artifact.getGameVersionStrings().add(extension.getLoader().get());
         artifact.setArtifact(extension.getModTask().get());
         this.dependsOn(extension.getModTask().get());
 
-        CurseRelation curseRelations = new CurseRelation();
-        extension.getDependencies().get().forEach(curseRelations::requiredDependency);
-        artifact.setCurseRelations(curseRelations);
+        if (!extension.getDependencies().get().isEmpty()) {
+            CurseRelation curseRelations = new CurseRelation();
+            extension.getDependencies().get().forEach(curseRelations::requiredDependency);
+            artifact.setCurseRelations(curseRelations);
+        }
 
+        this.setAdditionalArtifacts(Collections.emptyList());
         this.setMainArtifact(artifact);
+        this.setProjectId(extension.getCurseforgeId().get());
 
         this.doLast(task -> {
             CurseforgePublishTask curseforgeTask = ((CurseforgePublishTask) task);
-            releaseURL = "https://www.curseforge.com/minecraft/mc-mods/" + extension.getCurseforgeId() + "/files/" + curseforgeTask.getMainArtifact().getFileID();
+            releaseURL = "https://www.curseforge.com/minecraft/mc-mods/" + getProject().getExtensions().getByType(GenericExtension.class).getName().get().toLowerCase() + "/files/" + curseforgeTask.getMainArtifact().getFileID();
         });
     }
 
