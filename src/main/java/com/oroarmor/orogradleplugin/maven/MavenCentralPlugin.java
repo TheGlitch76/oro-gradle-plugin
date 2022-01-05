@@ -52,6 +52,8 @@ public class MavenCentralPlugin implements Plugin<Project> {
                         credentials.setUsername("OroArmor");
                         credentials.setPassword(((Map<String, String>) target.getProperties()).getOrDefault("ossrhPassword", System.getenv("OSSRH_PASSWORD")));
                     });
+
+                    maven.setName("MavenCentral");
                 });
             });
         }

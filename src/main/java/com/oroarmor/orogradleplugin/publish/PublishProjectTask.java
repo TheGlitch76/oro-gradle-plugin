@@ -91,7 +91,7 @@ public class PublishProjectTask extends DefaultTask {
                             for (MavenArtifactRepository repository : getProject().getExtensions().getByType(PublishingExtension.class).getRepositories().withType(MavenArtifactRepository.class)) {
                                 if (!repository.getName().equals("MavenLocal")) {
                                     downloadsString.append("[")
-                                            .append(formatName(repository.getName()))
+                                            .append(repository.getName())
                                             .append("](")
                                             .append(repository.getUrl())
                                             .append(")\n");
