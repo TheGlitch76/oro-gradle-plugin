@@ -47,7 +47,7 @@ public class MavenCentralPlugin implements Plugin<Project> {
                     String snapshotsRepoUrl = "https://oss.sonatype.org/content/repositories/snapshots/";
                     String url = target.getVersion().toString().endsWith("SNAPSHOT") ? snapshotsRepoUrl : releasesRepoUrl;
 
-                    maven.artifactUrls(url);
+                    maven.setUrl(url);
                     maven.credentials(credentials -> {
                         credentials.setUsername("OroArmor");
                         credentials.setPassword(((Map<String, String>) target.getProperties()).getOrDefault("ossrhPassword", System.getenv("OSSRH_PASSWORD")));

@@ -43,7 +43,7 @@ public class GenericPlugin implements Plugin<Project> {
             if (System.getenv("MAVEN_USERNAME") != null) {
                 repositories.maven(maven -> {
                     maven.setName("OroArmor");
-                    maven.artifactUrls("https://maven.oroarmor.com");
+                    maven.setUrl("https://maven.oroarmor.com");
                     maven.credentials(credentials -> {
                         credentials.setUsername(System.getenv("MAVEN_USERNAME"));
                         credentials.setPassword(System.getenv("MAVEN_PASSWORD"));
