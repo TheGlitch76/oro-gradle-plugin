@@ -25,12 +25,15 @@
 package com.oroarmor.orogradleplugin.minecraft;
 
 import com.matthewprenger.cursegradle.CurseExtension;
+import com.modrinth.minotaur.Minotaur;
+import com.modrinth.minotaur.ModrinthExtension;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 
 public abstract class MinecraftPlugin implements Plugin<Project> {
     @Override
     public void apply(Project target) {
+        target.getPlugins().apply(Minotaur.class);
         target.getExtensions().create("minecraftPublishing", MinecraftPublishingExtension.class, target);
 
         target.getExtensions().create("curseforge", CurseExtension.class);
